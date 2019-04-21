@@ -7,20 +7,29 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/sovikc/bsms/messaging"
 )
 
 // Server holds the dependencies for a HTTP server.
 type Server struct {
-	router chi.Router
+	Messaging messaging.Service
+	router    chi.Router
 }
 
 // New returns a new HTTP server.
-func New() *Server {
-	s := &Server{}
+func New(ms messaging.Service) *Server {
+	s := &Server{
+		Messaging: ms,
+	}
 
 	r := chi.NewRouter()
 	r.Use(basicHeaders)
 	r.Use(middleware.Recoverer)
+
+	r.Route("/messaging", func(r chi.Router) {
+		msg := messagingHandler{s.Messaging}
+		r.Mount("/v1", msg.router())
+	})
 
 	s.router = r
 	return s

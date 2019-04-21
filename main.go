@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/sovikc/bsms/messaging"
 	"github.com/sovikc/bsms/server"
 )
 
@@ -32,9 +33,11 @@ func main() {
 
 	var (
 		httpAddr = ":" + defaultPort
+		ms       messaging.Service
 	)
 
-	srv := server.New()
+	ms = messaging.NewService()
+	srv := server.New(ms)
 
 	httpServer := &http.Server{Addr: httpAddr,
 		Handler:      srv,

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { sendSMS } from "../actions";
 
 class SMSForm extends Component {
   constructor(props) {
@@ -113,6 +115,11 @@ class SMSForm extends Component {
     }
 
     this.submitButton.current.disabled = true;
+
+    this.props.sendSMS({
+      phone: this.state.phone,
+      messages: messages
+    });
   };
 
   render() {
@@ -198,4 +205,11 @@ class SMSForm extends Component {
   }
 }
 
-export default SMSForm;
+const mapStateToProps = state => {
+  return { deliveryStatus: state.deliveryStatus };
+};
+
+export default connect(
+  mapStateToProps,
+  { sendSMS }
+)(SMSForm);
