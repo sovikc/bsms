@@ -68,7 +68,6 @@ func (s *service) SendSMS(message *sms.Message) string {
 		}
 		success++
 	}
-	//close(responses)
 
 	response := fmt.Sprintf("Sent SMS with %d successes and %d failures", success, fail)
 	return response
@@ -144,8 +143,6 @@ func (s *service) sender(texts <-chan sms.Text, responses chan<- serviceResponse
 		}
 
 		var response struct {
-			//MessageID string `json:"message_id"`
-			//json: cannot unmarshal number into Go struct field .message_id of type string
 			SentAt string `json:"send_at"`
 		}
 
@@ -154,8 +151,6 @@ func (s *service) sender(texts <-chan sms.Text, responses chan<- serviceResponse
 			responses <- sr
 			return
 		}
-
-		log.Println("messageSentAt", response.SentAt)
 
 		if len(strings.Trim(response.SentAt, " ")) == 0 {
 			sr.Error = errors.New("SMS service returned an error")

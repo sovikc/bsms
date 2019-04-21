@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -47,10 +46,7 @@ func (h *messagingHandler) sendSMS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(request.Phone, request.Messages)
-
 	message := sms.New(request.Phone, transform(request.Messages))
-
 	status := h.msg.SendSMS(message)
 
 	var response = struct {
