@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/sovikc/bsms/bitly"
 	"github.com/sovikc/bsms/messaging"
 	"github.com/sovikc/bsms/server"
+	"github.com/sovikc/bsms/sms"
 )
 
 const (
@@ -26,17 +28,14 @@ func main() {
 	apiKey := os.Getenv("API_KEY")
 	apiSecret := os.Getenv("API_SECRET")
 
-	log.Println("Loaded accessToken", accessToken)
-	log.Println("Loaded groupGUID", groupGUID)
-	log.Println("Loaded apiKey", apiKey)
-	log.Println("Loaded apiSecret", apiSecret)
-
 	var (
 		httpAddr = ":" + defaultPort
 		ms       messaging.Service
+		us       sms.URLShortener
 	)
 
-	ms = messaging.NewService()
+	us = bitly.NewURLShortener(accessToken, groupGUID)
+	ms = messaging.NewService(apiKey, apiSecret, us)
 	srv := server.New(ms)
 
 	httpServer := &http.Server{Addr: httpAddr,

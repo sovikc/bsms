@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/sovikc/bsms/messaging"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/sovikc/bsms/messaging"
 )
 
 // Server holds the dependencies for a HTTP server.

@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/sovikc/bsms/sms"
+
 	"github.com/go-chi/chi"
 	"github.com/sovikc/bsms/messaging"
 )
@@ -26,6 +28,7 @@ func (h *messagingHandler) router() chi.Router {
 	return r
 }
 
+// Message is a value object for decoding
 type Message struct {
 	Message string
 }
@@ -46,10 +49,14 @@ func (h *messagingHandler) sendSMS(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(request.Phone, request.Messages)
 
+	message := sms.New(request.Phone, transform(request.Messages))
+
+	status := h.msg.SendSMS(message)
+
 	var response = struct {
 		Status string `json:"status"`
 	}{
-		Status: "Sent at " + time.Now().Format("Mon Jan 2 2006 15:04:05"),
+		Status: status + " at " + time.Now().Format("Mon Jan 2 2006 15:04:05"),
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -58,4 +65,12 @@ func (h *messagingHandler) sendSMS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func transform(messages []Message) []string {
+	msgs := make([]string, 0)
+	for _, v := range messages {
+		msgs = append(msgs, v.Message)
+	}
+	return msgs
 }
