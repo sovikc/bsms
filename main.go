@@ -36,6 +36,7 @@ func main() {
 
 	us = bitly.NewURLShortener(accessToken, groupGUID)
 	ms = messaging.NewService(apiKey, apiSecret, us)
+	ms = messaging.NewLoggingService(ms)
 	srv := server.New(ms)
 
 	httpServer := &http.Server{Addr: httpAddr,
