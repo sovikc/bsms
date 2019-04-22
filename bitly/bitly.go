@@ -81,7 +81,13 @@ func (u *urlShortener) GetShortenedURL(longURL string) (string, error) {
 	}
 
 	if !u.hasGroupGUID() {
-		u.getGroupGUID()
+		groupGUID, err := u.getGroupGUID()
+		if err != nil {
+			log.Println("Couldn't retreive group_guid for Bitly")
+			return shortURL, err
+		}
+		u.groupGUID = groupGUID
+		log.Println("Fetched Group GUID from Bitly")
 	}
 
 	var sb strings.Builder
