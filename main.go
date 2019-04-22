@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -28,6 +29,10 @@ func main() {
 	apiKey := os.Getenv("API_KEY")
 	apiSecret := os.Getenv("API_SECRET")
 
+	if isEmpty(accessToken) || isEmpty(apiKey) || isEmpty(apiSecret) {
+		log.Fatal("Error loading env variables")
+	}
+
 	var (
 		httpAddr = ":" + defaultPort
 		ms       messaging.Service
@@ -47,4 +52,8 @@ func main() {
 	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 		log.Printf("HTTP server ListenAndServe: %v", err)
 	}
+}
+
+func isEmpty(env string) bool {
+	return len(strings.Trim(env, " ")) == 0
 }

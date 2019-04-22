@@ -40,11 +40,23 @@ type serviceResponse struct {
 	Error  error
 }
 
+func (s *service) hasAPIKey() bool {
+	return len(s.apiKey) > 0
+}
+
+func (s *service) hasAPISecret() bool {
+	return len(s.apiSecret) > 0
+}
+
 // SendSMS is used to send sms
 func (s *service) SendSMS(message *sms.Message) string {
 	msgCount := len(message.Messages)
 	texts := make(chan sms.Text, msgCount)
 	responses := make(chan serviceResponse, msgCount)
+
+	if !s.hasAPIKey() || !s.hasAPISecret() {
+		return fmt.Sprintf("Sent SMS with %d successes and %d failures", 0, msgCount)
+	}
 
 	for i := 0; i < msgCount; i++ {
 		go s.sender(texts, responses)

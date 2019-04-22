@@ -38,8 +38,18 @@ func (u *urlShortener) hasGroupGUID() bool {
 	return len(u.groupGUID) > 0
 }
 
+func (u *urlShortener) hasToken() bool {
+	return len(u.token) > 0
+}
+
 func (u *urlShortener) getGroupGUID() (string, error) {
 	var groupGUID string
+
+	if !u.hasToken() {
+		log.Println("Couldn't find generic access token for Bitly")
+		return groupGUID, errors.New("Couldn't find generic access token for Bitly")
+	}
+
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", groupURL, nil)
 	if err != nil {
@@ -87,7 +97,6 @@ func (u *urlShortener) GetShortenedURL(longURL string) (string, error) {
 			return shortURL, err
 		}
 		u.groupGUID = groupGUID
-		log.Println("Fetched Group GUID from Bitly")
 	}
 
 	var sb strings.Builder
