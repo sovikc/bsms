@@ -10,8 +10,11 @@ Send upto 3 sms messages to a number after shortening URLs in the text using bit
 6.  There is a ```.env``` file inside the root ```bsms``` directory (it would be a hidden file), where the values for env variables ```BITLY_GENERIC_ACCESS_TOKEN, BITLY_GROUP_GUID, API_KEY, API_SECRET``` need to be provided.
 7.  I have used the latest version (```v4```) of ```Bitly API```. It requires a ```generic access token``` and a ```group_guid``` to shorten a URL. 
 8.  If the ```BITLY_GROUP_GUID``` is not supplied in the ```.env```, the code would handle that and make an extra API call to fetch the ```group_guid``` once.
-9.  I have also distributed the bundled javascript files along with the index.html in the ```bsms/static``` directory.
-10. The client-side development files are inside ```bsms/static``` directory 
+9.  I have also distributed the bundled javascript files along with the index.html in the ```bsms/static``` directory. The client-side development files are inside ```bsms/static``` directory 
 10. Now ```cd``` to directory ```bsms``` and run the command ```go run main.go```.
 11. This would download all the dependencies and start the server on port 8000.
 12. Open a browser and type ```localhost:8000``` and you should be able to see the UI.
+
+
+## User Interface
+![alt text](/Screenshot_of_SMS_Form.png)
